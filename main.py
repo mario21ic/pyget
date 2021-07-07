@@ -15,25 +15,20 @@ logging.basicConfig(filename='pyget.log', filemode='w', \
 
 def main(url, dir_dest):
     print("## Start ##")
-    page = requests.get(url)
-    doc = lh.fromstring(page.content)
-
-    a_elements = doc.xpath('//a')
-    i=0
-    links=[]
-    for a in range(5, len(a_elements)):
-        A=a_elements[a].get("href")
-        links.append(A)
-        i+=1
 
     if not os.path.isdir(dir_dest):
         print("Creating %s" % dir_dest)
         os.mkdir(dir_dest)
     os.chdir(dir_dest)
-    for l in links:
+
+    page = requests.get(url)
+    doc = lh.fromstring(page.content)
+
+    a_elements = doc.xpath('//a')
+    for a in range(5, len(a_elements)):
+        file_name = a_elements[a].get("href")
         try:
             print("=====")
-            file_name = l
             print("file_name:", file_name)
             file_url = url + file_name
             print("file_url:", file_url)
